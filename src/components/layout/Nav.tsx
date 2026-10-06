@@ -5,12 +5,13 @@ import { ArrowRight, Close, Menu } from "../ui/Icons";
 import { COMPANY, NAV_SECTIONS } from "@/content/site";
 import Wordmark from "../ui/Wordmark";
 
+// Section links use "/#id" so they work from the quote and contact pages too.
 const LINKS = [
-  { href: "#heritage", label: "Heritage" },
-  { href: "#operations", label: "Services" },
-  { href: "#network", label: "Network" },
-  { href: "#group", label: "The Group" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#heritage", label: "Heritage" },
+  { href: "/#operations", label: "Services" },
+  { href: "/#network", label: "Network" },
+  { href: "/#group", label: "The Group" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function Nav() {
@@ -67,7 +68,7 @@ export default function Nav() {
         }`}
       >
         <nav aria-label="Primary" className="container-x flex h-16 items-center justify-between gap-6 lg:h-[4.5rem]">
-          <a href="#top" className="shrink-0" aria-label="TAS Group of Companies, back to top">
+          <a href="/" className="shrink-0" aria-label="TAS Group of Companies home">
             <Wordmark />
           </a>
           <ul className="hidden items-center gap-8 lg:flex">
@@ -81,7 +82,7 @@ export default function Nav() {
             ))}
           </ul>
           <div className="flex items-center gap-2">
-            <a href="#quote" className="btn-cargo !px-4 !py-2.5 sm:!px-5">
+            <a href="/quote" className="btn-cargo !px-4 !py-2.5 sm:!px-5">
               <span className="hidden sm:inline">Get a quote</span>
               <span className="sm:hidden">Quote</span>
               <ArrowRight className="arrow h-3.5 w-3.5" />
@@ -126,14 +127,22 @@ export default function Nav() {
             {NAV_SECTIONS.map((s) => (
               <li key={s.id} className="relative">
                 <span className="absolute -left-[1.6rem] top-1/2 h-2 w-2 -translate-y-1/2 rounded-full border border-cyan bg-abyss" />
-                <a href={`#${s.id}`} onClick={() => setOpen(false)} className="flex items-baseline gap-4 py-2.5 text-foam">
+                <a href={s.id === "destination" ? "/quote" : `/#${s.id}`} onClick={() => setOpen(false)} className="flex items-baseline gap-4 py-2.5 text-foam">
                   <span className="label text-cargo">{s.code}</span>
                   <span className="display-wide text-2xl">{s.label}</span>
                 </a>
               </li>
             ))}
           </ol>
-          <div className="mt-10 space-y-2 text-sm text-mist">
+          <div className="mt-10 grid grid-cols-2 gap-2">
+            <a href="/quote" className="btn-cargo justify-center">
+              Get a quote
+            </a>
+            <a href="/contact" className="btn-ghost justify-center">
+              Contact
+            </a>
+          </div>
+          <div className="mt-8 space-y-2 text-sm text-mist">
             <a className="block" href={COMPANY.phoneHref}>{COMPANY.phone}</a>
             <a className="block" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
           </div>

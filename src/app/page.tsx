@@ -13,7 +13,7 @@ import Network from "@/components/sections/Network";
 import Ecosystem from "@/components/sections/Ecosystem";
 import ShipmentDemo from "@/components/sections/ShipmentDemo";
 import Sustainability from "@/components/sections/Sustainability";
-import Quote from "@/components/sections/Quote";
+import Destination from "@/components/sections/Destination";
 
 export default function Home() {
   return (
@@ -32,7 +32,7 @@ export default function Home() {
         <Ecosystem />
         <ShipmentDemo />
         <Sustainability />
-        <Quote />
+        <Destination />
       </main>
       <Footer />
     </ScrollRefresh>

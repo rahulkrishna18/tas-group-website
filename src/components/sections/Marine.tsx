@@ -1,17 +1,15 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
 import SceneCanvas from "../three/SceneCanvas";
+import { MarineScene } from "../three/scenes";
 import type { MarineFocus } from "../scenes/MarineScene";
 import { MARINE_FULL_LIST } from "@/content/site";
 import { useReducedMotion } from "@/hooks/useMediaQuery";
 import { LegLabel, Reveal } from "../ui/Section";
 import { Check } from "../ui/Icons";
 
-const loadMarineScene = () => import("../scenes/MarineScene");
-const MarineScene = dynamic(loadMarineScene, { ssr: false });
 
 const TABS: { id: MarineFocus; label: string; title: string; body: string; items: string[] }[] = [
   {
@@ -53,7 +51,7 @@ export default function Marine() {
     <section id="marine" aria-label="Marine operations" className="relative bg-abyss">
       <div className="relative h-[100svh] min-h-[640px] overflow-hidden">
         <SceneCanvas
-          preload={loadMarineScene}
+          eager={2}
           className="absolute inset-0"
           camera={{ fov: 36, near: 0.5, far: 5000, position: [130, 70, 20] }}
           fallback={<Image src="/images/tugboat.jpg" alt="" fill sizes="100vw" className="object-cover opacity-60" />}

@@ -42,6 +42,17 @@ const LOADS: Record<Mode, string[]> = {
 };
 const STEPS = ["Mode", "Route & cargo", "Contact", "Review"];
 
+/** Maps service links (/quote?service=…) to a sensible starting point in the form. */
+const SERVICE_PREFILL: Record<string, { mode?: Mode; extra?: string }> = {
+  freight: { mode: "multimodal" },
+  customs: { extra: "Customs brokerage" },
+  warehouse: { extra: "Warehousing & distribution" },
+  transport: { mode: "land" },
+  project: { extra: "Project cargo / heavy lift" },
+  tugbarge: { extra: "Tug & barge" },
+  marine: { extra: "Ship agency & marine services" },
+};
+
 const required: Record<number, (keyof Form)[]> = {
   0: ["mode"],
   1: ["origin", "destination", "cargoType"],
@@ -56,7 +67,7 @@ function validate(step: number, f: Form) {
   return errs;
 }
 
-export default function Quote() {
+export default function Quote({ standalone = false }: { standalone?: boolean }) {
   const [form, setForm] = useState<Form>(EMPTY);
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Partial<Record<keyof Form, string>>>({});
@@ -64,13 +75,20 @@ export default function Quote() {
   const [dir, setDir] = useState(1);
   const panel = useRef<HTMLDivElement>(null);
 
+  // Prefill from links elsewhere on the site, e.g. /quote?origin=Penang or /quote?service=customs
   useEffect(() => {
-    const onPrefill = (e: Event) => {
-      const d = (e as CustomEvent<Partial<Form>>).detail;
-      setForm((f) => ({ ...f, ...d }));
-    };
-    window.addEventListener("tas:prefill", onPrefill);
-    return () => window.removeEventListener("tas:prefill", onPrefill);
+    const q = new URLSearchParams(window.location.search);
+    const origin = q.get("origin") ?? "";
+    const destination = q.get("destination") ?? "";
+    const svc = SERVICE_PREFILL[q.get("service") ?? ""];
+    if (!origin && !destination && !svc) return;
+    setForm((f) => ({
+      ...f,
+      origin: origin || f.origin,
+      destination: destination || f.destination,
+      mode: svc?.mode ?? f.mode,
+      extras: svc?.extra && !f.extras.includes(svc.extra) ? [...f.extras, svc.extra] : f.extras,
+    }));
   }, []);
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => {
@@ -128,17 +146,19 @@ export default function Quote() {
 
   const ModeIcon = MODES.find((m) => m.id === form.mode)?.icon ?? Box;
 
+  const Heading = standalone ? "h1" : "h2";
+
   return (
-    <section id="quote" aria-label="Get a quote" className="relative overflow-hidden bg-midnight py-24 lg:py-32">
+    <section id="quote" aria-label="Get a quote" className={`relative overflow-hidden bg-midnight ${standalone ? "min-h-[100svh] pb-24 pt-28 lg:pb-32 lg:pt-36" : "py-24 lg:py-32"}`}>
       <div className="pointer-events-none absolute -right-40 top-0 h-[600px] w-[600px] rounded-full bg-cargo/10 blur-[120px]" />
       <div className="container-x relative">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
           {/* Left: headline + live booking note */}
           <div>
-            <LegLabel code="11">Destination</LegLabel>
-            <h2 className="display mt-6 text-[clamp(2.6rem,6vw,5.6rem)]">
+            <LegLabel code="11">Get a quote</LegLabel>
+            <Heading className="display mt-6 text-[clamp(2.6rem,6vw,5.6rem)]">
               Start the <span className="text-cargo">journey.</span>
-            </h2>
+            </Heading>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-mist">
               Tell us what’s moving and where. A TAS logistics specialist will come back with the right mode, route and
               services.

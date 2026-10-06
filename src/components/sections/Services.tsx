@@ -93,7 +93,7 @@ export default function Services() {
                       </li>
                     ))}
                   </ul>
-                  <a href="#quote" className="label mt-7 inline-flex items-center gap-2 text-foam underline decoration-cargo decoration-2 underline-offset-[6px] transition-colors hover:text-cargo">
+                  <a href={`/quote?service=${s.id}`} className="label mt-7 inline-flex items-center gap-2 text-foam underline decoration-cargo decoration-2 underline-offset-[6px] transition-colors hover:text-cargo">
                     Request a quote for {s.title.split(",")[0].replace(" & Mover", "")}
                   </a>
                 </article>

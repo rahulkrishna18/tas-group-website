@@ -1,8 +1,14 @@
 # TAS Group of Companies: website
 
-A single-page, scroll-driven experience built around one idea: **From Port to Possibility**.
-The visitor follows a TAS container from the Penang quayside through port operations, sea / air / land,
-customs, warehousing and distribution to a regional network, ending at a quote request.
+A scroll-driven experience built around one idea: **From Port to Possibility**.
+The home page follows a TAS container from the Penang quayside through port operations, sea / air / land,
+customs, warehousing and distribution to a regional network, ending at a "Destination" hand-off.
+
+Routes:
+
+- `/`: the story, from the Penang quay to the regional network
+- `/quote`: four-step quote request. Supports `?origin=…` and `?service=<service id>` prefill.
+- `/contact`: offices, addresses and a regional map
 
 ## Stack
 
@@ -32,7 +38,7 @@ Optionally set `NEXT_PUBLIC_SITE_URL` to the production domain for absolute Open
 
 ```
 src/
-  app/                 layout, page, global styles, icon, 404
+  app/                 layout, home, /quote, /contact, global styles, icon, 404
   content/site.ts      ALL company facts and copy (single source of truth)
   data/geo/            generated map data (see scripts/build-geo.mjs)
   components/
@@ -78,4 +84,4 @@ volumes, routes, awards, statistics or dates.
 
 ## Image credits
 
-Photography is from Unsplash (Unsplash License). See `docs/IMAGE-CREDITS.md`; the credits also appear in the site footer.
+Photography is from Unsplash (Unsplash License, attribution not required). Credits are recorded in `docs/IMAGE-CREDITS.md`.

@@ -40,7 +40,7 @@ export default function ProjectCargo() {
       ref={section}
       aria-label="Project cargo and heavy lift"
       className="relative bg-abyss"
-      style={{ height: reduced ? "auto" : mobile ? "300svh" : "340vh" }}
+      style={{ height: reduced ? "auto" : mobile ? "240svh" : "260vh" }}
     >
       <div className={`${reduced ? "relative min-h-[100svh]" : "sticky top-0 h-[100svh]"} overflow-hidden`}>
         <div ref={photo} className="absolute inset-0 will-change-transform" style={{ transform: "scale(1.12)" }}>

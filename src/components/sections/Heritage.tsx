@@ -87,7 +87,7 @@ function HeritageTrack() {
   });
 
   return (
-    <section id="heritage" ref={section} aria-label="Heritage" className="relative bg-abyss" style={{ height: "440vh" }}>
+    <section id="heritage" ref={section} aria-label="Heritage" className="relative bg-abyss" style={{ height: "340vh" }}>
       <div className="chart-grid sticky top-0 h-[100svh] overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_30%_40%,rgb(18_103_165/0.18),transparent_70%)]" />
         <div ref={track} className="relative h-full will-change-transform" style={{ width: `${VB_W / 10}vw` }}>

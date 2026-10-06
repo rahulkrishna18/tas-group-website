@@ -1,8 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import SceneCanvas from "../three/SceneCanvas";
+import { NetworkGlobeScene } from "../three/scenes";
 import type { Mode } from "../three/Globe";
 import { OFFICES, OfficeId } from "@/content/site";
 import { REGION_COUNTRIES, REGION_LABELS, REGION_LAND, REGION_OFFICES, REGION_ROUTES, REGION_VIEWBOX } from "@/data/geo/regionMap";
@@ -10,19 +10,12 @@ import { useIsMobile } from "@/hooks/useMediaQuery";
 import { SectionHeader } from "../ui/Section";
 import { ArrowRight, Phone, Pin, Plane, Ship, Truck } from "../ui/Icons";
 
-const loadNetworkGlobeScene = () => import("../scenes/NetworkGlobeScene");
-const NetworkGlobeScene = dynamic(loadNetworkGlobeScene, { ssr: false });
 
 const MODES: { id: Mode; label: string; icon: typeof Ship; swatch: string }[] = [
   { id: "sea", label: "Sea", icon: Ship, swatch: "bg-cyan" },
   { id: "air", label: "Air", icon: Plane, swatch: "bg-cargo" },
   { id: "land", label: "Land", icon: Truck, swatch: "bg-foam" },
 ];
-
-export function prefillQuote(detail: Record<string, string>) {
-  window.dispatchEvent(new CustomEvent("tas:prefill", { detail }));
-  document.getElementById("quote")?.scrollIntoView({ behavior: "smooth" });
-}
 
 export default function Network() {
   const mobile = useIsMobile();
@@ -82,7 +75,7 @@ export default function Network() {
             <div className="relative aspect-[4/5] sm:aspect-[16/12] lg:aspect-auto lg:h-[min(78vh,760px)]">
               {view === "globe" ? (
                 <>
-                  <SceneCanvas preload={loadNetworkGlobeScene} className="absolute inset-0 cursor-grab active:cursor-grabbing" camera={{ fov: 32, near: 0.01, far: 50, position: [0, 0, 2.4] }} mountMargin="40% 0px">
+                  <SceneCanvas eager={3} className="absolute inset-0 cursor-grab active:cursor-grabbing" camera={{ fov: 32, near: 0.01, far: 50, position: [0, 0, 2.4] }} mountMargin="40% 0px">
                     <NetworkGlobeScene selected={selected} onSelect={setSelected} modes={modes} zoom={zoom} />
                   </SceneCanvas>
                   <div className="absolute bottom-16 right-3 z-10 flex flex-col border border-foam/15 bg-abyss/80 backdrop-blur sm:right-4">
@@ -173,9 +166,9 @@ export default function Network() {
               </ul>
 
               <div className="mt-7 flex flex-wrap gap-3">
-                <button onClick={() => prefillQuote({ origin: office.name })} className="btn-cargo !py-3">
+                <a href={`/quote?origin=${encodeURIComponent(office.name)}`} className="btn-cargo !py-3">
                   Quote from {office.name} <ArrowRight className="arrow h-4 w-4" />
-                </button>
+                </a>
                 <a
                   className="btn-ghost !py-3"
                   target="_blank"
@@ -193,11 +186,11 @@ export default function Network() {
   );
 }
 
-function RegionMap({ selected, onSelect, modes }: { selected: OfficeId; onSelect: (id: OfficeId) => void; modes: Mode[] }) {
+export function RegionMap({ selected, onSelect, modes, toolbar = true }: { selected: OfficeId; onSelect: (id: OfficeId) => void; modes: Mode[]; toolbar?: boolean }) {
   const { w, h } = REGION_VIEWBOX;
   const klia = REGION_OFFICES.klia;
   return (
-    <div className="absolute inset-0 flex items-center justify-center p-2 pt-14">
+    <div className={`absolute inset-0 flex items-center justify-center p-2 ${toolbar ? "pt-14" : ""}`}>
       <div className="relative h-full max-w-full" style={{ aspectRatio: `${w} / ${h}` }}>
         <svg viewBox={`0 0 ${w} ${h}`} className="absolute inset-0 h-full w-full" role="img" aria-label="Map of Peninsular Malaysia and Singapore showing TAS office locations">
           <defs>
@@ -250,7 +243,7 @@ function RegionMap({ selected, onSelect, modes }: { selected: OfficeId; onSelect
           const [x, y] = REGION_OFFICES[o.id];
           const on = o.id === selected;
           const hq = o.id === "penang";
-          const left = o.id === "portklang";
+          const left = o.id === "portklang" || o.id === "singapore";
           return (
             <button
               key={o.id}

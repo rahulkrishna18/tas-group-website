@@ -370,5 +370,5 @@ export const NAV_SECTIONS = [
   { id: "group", label: "Group", code: "08" },
   { id: "control", label: "Control", code: "09" },
   { id: "responsibility", label: "Responsibility", code: "10" },
-  { id: "quote", label: "Destination", code: "11" },
+  { id: "destination", label: "Destination", code: "11" },
 ] as const;

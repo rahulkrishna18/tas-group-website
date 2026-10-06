@@ -1,15 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import SceneCanvas from "../three/SceneCanvas";
+import { PortScene } from "../three/scenes";
 import { stepFromProgress, useScrollProgress } from "@/hooks/useScrollProgress";
 import { useIsMobile, useReducedMotion } from "@/hooks/useMediaQuery";
 import { LegLabel } from "../ui/Section";
 
-const loadPortScene = () => import("../scenes/PortScene");
-const PortScene = dynamic(loadPortScene, { ssr: false });
 
 const STEPS = [
   {
@@ -71,11 +69,11 @@ export default function PortOps() {
       ref={section}
       aria-label="Port operations"
       className="relative bg-abyss"
-      style={{ height: reduced ? "auto" : mobile ? "520svh" : "620vh" }}
+      style={{ height: reduced ? "auto" : mobile ? "420svh" : "480vh" }}
     >
       <div className={`${reduced ? "relative min-h-[100svh]" : "sticky top-0 h-[100svh]"} overflow-hidden`}>
         <SceneCanvas
-          preload={loadPortScene}
+          eager={1}
           className="absolute inset-0"
           camera={{ fov: 38, near: 0.5, far: 5000, position: [-120, 70, 120] }}
           fallback={<Image src="/images/port-aerial.jpg" alt="" fill sizes="100vw" className="object-cover opacity-60" />}

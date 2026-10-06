@@ -1,17 +1,15 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import SceneCanvas from "../three/SceneCanvas";
+import { HeroScene } from "../three/scenes";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { useIsMobile, useReducedMotion } from "@/hooks/useMediaQuery";
 import { range } from "@/lib/math";
 import { COMPANY } from "@/content/site";
 import { ArrowRight } from "../ui/Icons";
 
-const loadHeroScene = () => import("../scenes/HeroScene");
-const HeroScene = dynamic(loadHeroScene, { ssr: false });
 
 const STAGES = [
   { at: 0, code: "00", name: "Origin" },
@@ -71,7 +69,7 @@ export default function Hero() {
       ref={section}
       aria-label="TAS Group: from port to possibility"
       className="relative"
-      style={{ height: reduced ? "100svh" : mobile ? "440svh" : "560svh" }}
+      style={{ height: reduced ? "100svh" : mobile ? "360svh" : "440svh" }}
     >
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         {/* poster: paints immediately while the WebGL scene loads behind it */}
@@ -79,8 +77,8 @@ export default function Hero() {
           <Image src="/images/port-cranes.jpg" alt="" fill preload sizes="100vw" className="object-cover opacity-50" />
         </div>
         <SceneCanvas
-          preload={loadHeroScene}
           loader={false}
+          eager={0}
           className="absolute inset-0"
           camera={{ fov: 40, near: 0.5, far: 6000, position: [62, 21, 66] }}
           mountMargin="0px"
@@ -120,7 +118,7 @@ export default function Hero() {
             of Penang to wherever your cargo needs to go.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#quote" className="btn-cargo">
+            <a href="/quote" className="btn-cargo">
               Get a quote <ArrowRight className="arrow h-4 w-4" />
             </a>
             <a href="#network" className="btn-ghost">
