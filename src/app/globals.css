@@ -1,0 +1,255 @@
+@import "tailwindcss";
+
+@theme {
+  --color-abyss: #06141d;
+  --color-midnight: #0b2233;
+  --color-hull: #0f2c40;
+  --color-marine: #1267a5;
+  --color-cyan: #20b9d4;
+  --color-cargo: #f28c28;
+  --color-cargo-deep: #d9741a;
+  --color-foam: #edf3f5;
+  --color-mist: #c9d6dc;
+  --color-steel: #75838c;
+  --color-paper: #f4f7f8;
+
+  --ease-ship: cubic-bezier(0.22, 0.8, 0.2, 1);
+  --ease-crane: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --breakpoint-3xl: 112rem;
+}
+
+@theme inline {
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  html:not(.reduce-motion) {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-abyss);
+    color: var(--color-foam);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-cargo);
+    color: var(--color-abyss);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-cyan);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .display {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 112;
+    letter-spacing: -0.025em;
+    line-height: 0.92;
+    font-weight: 800;
+  }
+  .display-wide {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 125;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+  .container-x {
+    width: 100%;
+    max-width: 92rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-x {
+      padding-inline: 1.75rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .container-x {
+      padding-inline: 3.5rem;
+    }
+  }
+
+  /* Nautical-chart grid used behind map/route sections */
+  .chart-grid {
+    background-image:
+      linear-gradient(to right, rgb(237 243 245 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(237 243 245 / 0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .chart-grid-light {
+    background-image:
+      linear-gradient(to right, rgb(6 20 29 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(6 20 29 / 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* Corrugated container side, used for CSS cargo accents */
+  .corrugated {
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.16) 0 2px,
+      transparent 2px 7px,
+      rgb(255 255 255 / 0.08) 7px 8px,
+      transparent 8px 11px
+    );
+  }
+
+  .btn-cargo {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--color-cargo);
+    color: var(--color-abyss);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 1rem 1.4rem;
+    overflow: hidden;
+    isolation: isolate;
+    transition: color 0.35s var(--ease-ship);
+  }
+  .btn-cargo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-foam);
+    transform: translateX(-101%);
+    transition: transform 0.45s var(--ease-ship);
+    z-index: -1;
+  }
+  .btn-cargo:hover::before,
+  .btn-cargo:focus-visible::before {
+    transform: translateX(0);
+  }
+  .btn-cargo .arrow {
+    transition: transform 0.45s var(--ease-ship);
+  }
+  .btn-cargo:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid rgb(237 243 245 / 0.28);
+    color: var(--color-foam);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 1rem 1.4rem;
+    transition:
+      border-color 0.3s,
+      background 0.3s;
+    backdrop-filter: blur(6px);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-cyan);
+    background: rgb(32 185 212 / 0.08);
+  }
+}
+
+@layer utilities {
+  .text-shadow-soft {
+    text-shadow: 0 2px 30px rgb(6 20 29 / 0.55);
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Animated dashed route line */
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+.route-flow {
+  stroke-dasharray: 6 10;
+  animation: dash-flow 1.6s linear infinite;
+}
+@keyframes ping-soft {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.node-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ping-soft 2.4s var(--ease-ship) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+.status-blink {
+  animation: blink 1.4s steps(2, jump-none) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
